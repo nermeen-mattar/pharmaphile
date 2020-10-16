@@ -1,0 +1,90 @@
+/*
+    Colors
+ */
+$pharma_yellow: #E6BD43;
+$pharma_black: #000000;
+$pharma_white: #FDFDFD;
+$pharma_gray: #787878;
+$pharma_blue: #1DC2F6;
+
+/*
+    Input
+ */
+.pharmaInput {
+  font-family: Roboto, sans-serif;
+  width: 419px;
+  height: 55px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 16px;
+  padding: 5px;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background-color: rgba(0, 0, 0, 0.15) !important;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  margin-bottom: 5px;
+
+  @media screen and (max-width: 600px) {
+    font-family: Roboto, sans-serif;
+    margin: 0px;
+  }
+}
+
+
+/*
+    Generics
+ */
+.small {
+  width: 300px;
+  height: 35px;
+}
+
+.center-margin {
+  margin: auto auto;
+}
+
+.table-col-1 {
+  background: #FFC200;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  color: white;
+  max-height: 55px;
+  height: 55px;
+}
+
+.table-col-2 {
+  background: rgba(255, 194, 0, 0.85);
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  color: white;
+  max-height: 55px;
+  height: 55px;
+}
+
+.table-col-3 {
+  background: rgba(255, 194, 0, 0.6);
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  color: white;
+  max-height: 55px;
+  height: 55px;
+}
+
+.table-col-4 {
+  background: rgba(255, 194, 0, 0.45);
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  color: white;
+  max-height: 55px;
+  height: 55px;
+}
+
+.inprogress {
+  color:  #0E99FE;
+}
+
+.accepted {
+  color: #0DE03C;
+}
+
+.not-matched {
+  color: #FE0E0E;
+}
