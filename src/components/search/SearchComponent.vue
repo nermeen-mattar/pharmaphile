@@ -8,6 +8,9 @@
 
 <script>
 export default {
+  created() {
+    this.$store.dispatch('search', this.payload); /* to view pharmacies after login or refresh */
+  },
   data() {
     return {
       name: 'SearchComponent',
