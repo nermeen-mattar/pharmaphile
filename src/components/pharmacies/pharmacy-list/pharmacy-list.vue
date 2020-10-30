@@ -12,29 +12,7 @@ export default {
   data() {
     return {
       name: 'pharmacy-list',
-      pharmacies: [
-        {
-          title: 'Talal Pharmacy',
-          pharmacist: 'Dr. haneen mustafa',
-          location: 'Al-balqa - ahmad st',
-          email: 'infopharmacy@email.com',
-          phone: '0798654321'
-        },
-        {
-          title: 'Talal Pharmacy',
-          pharmacist: 'Dr. haneen mustafa',
-          location: 'Al-balqa - ahmad st',
-          email: 'infopharmacy@email.com',
-          phone: '0798654321'
-        },
-        {
-          title: 'Talal Pharmacy',
-          pharmacist: 'Dr. haneen mustafa',
-          location: 'Al-balqa - ahmad st',
-          email: 'infopharmacy@email.com',
-          phone: '0798654321'
-        }
-      ]
+      pharmacies: []
     }
   },
   components: { Pharmacy }
@@ -46,7 +24,7 @@ export default {
     margin: 0 auto;
     margin-bottom: 20px;
     display: flex;
-    flex-direction: row;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     .pharmacy {
