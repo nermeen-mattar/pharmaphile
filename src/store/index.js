@@ -11,30 +11,14 @@ export default new Vuex.Store({
     userProfile: {},
     // Pharmacies
     pharmacies: [
-      {
-        title: 'Talal Pharmacy',
-        pharmacist: 'Dr. haneen mustafa',
-        location: 'Al-balqa - ahmad st',
-        email: 'infopharmacy@email.com',
-        phone: '0798654321',
-        imageUrl: 'https://healthtimes.com.au/administrator/uploads/article_images/How%20To%20Become%20A%20Phar1593396808.jpg'
-      },
-      {
-        title: 'Talal Pharmacy',
-        pharmacist: 'Dr. haneen mustafa',
-        location: 'Al-balqa - ahmad st',
-        email: 'infopharmacy@email.com',
-        phone: '0798654321',
-        imageUrl: 'https://healthtimes.com.au/administrator/uploads/article_images/How%20To%20Become%20A%20Phar1593396808.jpg'
-      },
-      {
-        title: 'Talal Pharmacy',
-        pharmacist: 'Dr. haneen mustafa',
-        location: 'Al-balqa - ahmad st',
-        email: 'infopharmacy@email.com',
-        phone: '0798654321',
-        imageUrl: 'https://healthtimes.com.au/administrator/uploads/article_images/How%20To%20Become%20A%20Phar1593396808.jpg'
-      }
+      // {
+      //   title: 'Talal Pharmacy',
+      //   pharmacist: 'Dr. haneen mustafa',
+      //   location: 'Al-balqa - ahmad st',
+      //   email: 'infopharmacy@email.com',
+      //   phone: '0798654321',
+      //   imageUrl: 'https://healthtimes.com.au/administrator/uploads/article_images/How%20To%20Become%20A%20Phar1593396808.jpg'
+      // },
     ],
     // Selected Pharmacy
     selectedPharmacy: {},
@@ -78,9 +62,17 @@ export default new Vuex.Store({
      * @returns {*[]}
      */
     searchPharmacies(state, pharmacies) {
+      let searchValue = pharmacies.payload;
       if (pharmacies) {
+        if(!searchValue || searchValue.trim() === '') { // empty search value
+          state.pharmacies = pharmacies.documents;
+        }
         state.pharmacies = pharmacies.documents.filter(pharmacy => {
-          return pharmacy.name.indexOf(pharmacies.payload) !== -1 ? pharmacy : '';
+          const pharmacyName = pharmacy.name.toLowerCase().replace(/\s/g, '');
+          searchValue = searchValue.toLowerCase().replace(/\s/g, '');
+          return pharmacyName.includes(searchValue) ||
+          searchValue.includes(pharmacyName)
+          ? pharmacy : '';
         });
       } else {
         return [];
@@ -145,6 +137,22 @@ export default new Vuex.Store({
   actions: {
 
     /**
+     * @description Get pharmacy by pharmacy id
+     * @param commit
+     * @param id
+     * @returns pharmacy object
+     */
+    async getPharmacyById({ commit }, id) {
+      // const data = await fb.pharmaciesCollection.where("uuid", "==", id).get();
+      // commit('setSelectedPharmacy', data.docs[0].data());
+      // return data.docs[0].data();
+      const docRef = await fb.pharmaciesCollection.doc(id).get();
+      const pharmacyObj = docRef.data();
+      commit('setSelectedPharmacy', pharmacyObj);
+      return pharmacyObj;
+    },
+
+    /**
      *
      * @param commit
      * @param pharmacy
@@ -169,7 +177,7 @@ export default new Vuex.Store({
      * @returns {Promise<void>}
      */
     async getTrainings({ commit }, pharmacy) {
-      // Get the trainings
+      // Get the trainings - pharmacy trainings
       let trainings = [];
       await fb.pharmaciesCollection.doc(pharmacy.uuid)
         .collection('trainings')
@@ -214,6 +222,7 @@ export default new Vuex.Store({
      */
     async getUserTrainings({ commit }, training) {
       let userTraining = [];
+      // const uid = fb.auth.currentUser.uid;
       await fb.usersCollection.doc(training.userId)
         .collection('trainings')
         .get()
@@ -259,17 +268,29 @@ export default new Vuex.Store({
       commit('setSelectedTrainee', trainee)
     },
 
+
+    /**
+     * @param dispatch
+     * @param form
+     * @returns {Promise<void>}
+     */
+    async addReview({ dispatch }, payload) {
+      await fb.pharmaciesCollection.doc(payload.uuid)
+      .collection('reviews').doc().set(JSON.parse(JSON.stringify(payload)));
+      // dispatch('getReviews', pharmacy); // ??? not needed
+    },
+
     /**
      * @param review
      * @param commit
      * @returns {Promise<void>}
      */
     async submitReview({ commit }, review) {
-      await fb.pharmaciesCollection.doc(review.uid)
+      await fb.pharmaciesCollection.doc(review.uid) // state.selectedPharmacy.uuid???
         .collection('reviews')
-        .doc(review.uid + review.description.trim())
+        .doc() // review.uid + review.description.trim() ???
         .set(review);
-      commit('setAnything', '2');
+      commit('setAnything', '2'); // why ???
     },
 
     /**
@@ -319,7 +340,7 @@ export default new Vuex.Store({
       const uid = fb.auth.currentUser.uid;
       await fb.pharmaciesCollection.doc(uid)
         .collection('trainings')
-        .doc(uid + training.name.trim())
+        .doc() // uid + training.name.trim()???
         .set(training);
       commit('setAnything', '2');
     },
@@ -447,6 +468,10 @@ export default new Vuex.Store({
      * @returns {Promise<void>}
      */
     async signup({ dispatch }, form) {
+      const toast = form.toastObject; 
+      try {
+        delete form.toastObject;
+
       // sign user up
       const { user } = await fb.auth.createUserWithEmailAndPassword(form.email, form.password);
 
@@ -484,6 +509,9 @@ export default new Vuex.Store({
         dispatch('fetchPharmacyProfile', user);
 
       }
+    } catch(e) {
+      toast.error(e.message);
+    }
 
       // fetch user profile and set in state
     },

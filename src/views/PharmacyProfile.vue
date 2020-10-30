@@ -9,12 +9,12 @@
     <div class="profile-container">
       <div v-if="info" class="info">
         <img :src="info.imageUrl" alt="" class="info-image">
-        <h3 class="info-pharmacy-name">{{ $route.params.id }}</h3>
+        <h3 class="info-pharmacy-name">{{ info.name }}</h3>
         <h4 class="info-pharmacy">Pharmacy</h4>
         <div class="info-box">
           <div class="social-wrapper">
             <p><img alt="" src="../assets/manager.png"></p>
-            <p>Manager: {{ info.name }}</p>
+            <p>Manager: {{ info.manager }}</p>
           </div>
           <div class="social-wrapper">
             <p><img alt="" src="../assets/phone_black.png"></p>
@@ -50,7 +50,7 @@
               <th class="table-col-1" scope="col">Title</th>
               <th class="table-col-2" scope="col">Created at</th>
               <th class="table-col-3" scope="col">Due Date</th>
-              <th class="table-col-4" scope="col">Apply</th>
+              <th v-if="$store.getters.getUserProfile.isTrainee" class="table-col-4" scope="col">Apply</th>
             </tr>
             </thead>
             <tbody>
@@ -58,7 +58,7 @@
               <th scope="row">{{ training.name }}</th>
               <td>{{ training.date }}</td>
               <td>{{ training.date }}</td>
-              <td class="status-code accepted">
+              <td class="status-code accepted" v-if="$store.getters.getUserProfile.isTrainee">
                 <button class="btn btn-primary" @click="onApplyClicked(training)">Apply</button>
               </td>
             </tr>
@@ -120,7 +120,7 @@ export default {
         description: '',
         imageUrl: this.$store.getters.getUserProfile.imageUrl ? this.$store.getters.getUserProfile.imageUrl : this.$store.getters.selectedPharmacy.imageUrl,
         rate: 0,
-        uid: this.$store.getters.selectedPharmacy.uuid
+        uuid: this.$store.getters.selectedPharmacy.uuid // ??? uid or uuid - undefined after refreshing
       }
     };
   },
@@ -138,7 +138,7 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['getTrainings', 'getReviews', 'applyOnTraining']),
+    ...mapActions(['getTrainings', 'getReviews', 'getPharmacyById', 'applyOnTraining', 'selectPharmacy', 'addReview']),
 
     /**
      *
@@ -153,7 +153,8 @@ export default {
      * @event onclick
      */
     submitReview() {
-      this.$store.dispatch('submitReview', this.ratingInfo);
+      // this.$store.dispatch('submitReview', this.ratingInfo);
+      this.$store.dispatch('addReview', this.ratingInfo);
       this.$toast.success('Submitted!');
       this.ratingInfo.description = '';
       this.ratingInfo.rate = 0;
@@ -179,6 +180,8 @@ export default {
       training.pharmacyLocation = this.$store.getters.selectedPharmacy.city + ', ' + this.$store.getters.selectedPharmacy.address;
       training.status = 0;
       training.dateApplied = this.getDate();
+      console.log('training', training);
+      console.log('this.$store.getters.selectedPharmacy', this.$store.getters.selectedPharmacy);
       this.applyOnTraining(training);
       this.$toast.success('Applied!');
     },
@@ -197,23 +200,30 @@ export default {
 
   },
   created() {
-    this.getReviews(this.$store.state.selectedPharmacy)
-      .then((data) => {
-        this.info = this.$store.state.selectedPharmacy;
-        this.info.reviews = data;
-        console.log('Trainings', this.$store.state.selectedPharmacy);
+
+    this.getPharmacyById(this.$route.params.id).then(pharmacyObj => {
+              this.info = pharmacyObj;
+        this.selectPharmacy(pharmacyObj);
+        this.ratingInfo.uuid = pharmacyObj.uuid; /* fix unable to add review after refreshing */
       });
-    this.getTrainings(this.$store.state.selectedPharmacy)
-      .then((data) => {
-        console.log('Trainings', this.$store.state.selectedPharmacy);
-        this.info.trainings = data;
-      });
+
+
+    // this.getReviews(this.$store.state.selectedPharmacy)
+    //   .then((data) => {
+    //     this.info = this.$store.state.selectedPharmacy;
+    //     this.info.reviews = data;
+    //     console.log('Trainings', this.$store.state.selectedPharmacy);
+    //   });
+    // this.getTrainings(this.$store.state.selectedPharmacy)
+    //   .then((data) => {
+    //     console.log('Trainings', this.$store.state.selectedPharmacy);
+    //     this.info.trainings = data;
+    //   });
   },
   mounted() {
-    this.info = this.$store.getters.selectedPharmacy;
+    this.info = {}; // this.$store.getters.selectedPharmacy;  undefined when refresh
     bus.$on('pharmacy_data', (payload) => {
       console.log(payload);
-      alert('hi');
     });
 
   }
