@@ -5,10 +5,11 @@
           <div class="logo">
             <img src="../../assets/logo.png" alt="">
           </div>
-          <a href="https://www.pinterest.com/munchbakery/" class="linkedin"></a>
-          <a href="https://www.instagram.com/munchbakery/" class="instagram"></a>
-          <a href="https://twitter.com/munchbakery?lang=en" class="email"></a>
-          <a href="https://www.facebook.com/munchbakery/" class="facebook"></a>
+          <a href="https://www.facebook.com/PharmaPhile1/" class="facebook" target="_blank" rel="noopener noreferrer"></a>
+          <a href="https://www.instagram.com/pharmaphile1/" class="instagram" target="_blank" rel="noopener noreferrer"></a>
+          <a href="https://www.linkedin.com/company/pharmaphile/" class="linkedin" target="_blank" rel="noopener noreferrer"></a>
+          <a href="mailto:PharmaPhile1@gmail.com" class="email" rel="noopener noreferrer"></a>
+
           <br>
           <article>
             <a href="#">About Us</a>

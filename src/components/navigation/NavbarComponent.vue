@@ -33,7 +33,7 @@
           <router-link to="/contactus" class="nav-link" @click="onContactUsClicked()">CONTACT US</router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/profile" class="nav-link" @click="onProfileClicked()" href="#"><img width="25" height="25" style="border-radius: 50%" :src="$store.getters.getUserProfile.imageUrl || '../assets/dummyProfile.png'" alt=""></router-link>
+          <router-link to="/profile" class="nav-link" @click="onProfileClicked()" href="#"><img width="42" style="border-radius: 50%" :src="$store.getters.getUserProfile.imageUrl" alt=""></router-link>
         </li>
 
         <li class="nav-item">
