@@ -16,7 +16,7 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
-    name: 'Landing',
+    name: 'Login',
     component: Landing,
   },
   {
@@ -36,7 +36,8 @@ const routes = [
   {
     path: '/profile',
     name: 'Profile',
-    component: Profile
+    component: Profile,
+    meta: {requiresAuth: true}
   },
   {
     path: '/contactus',
@@ -46,22 +47,26 @@ const routes = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: TraineeDashboard
+    component: TraineeDashboard,
+    meta: {requiresAuth: true}
   },
   {
     path: '/pharmacy/:id',
     name: 'Pharmacy Profile',
     component: PharmacyProfile,
+    meta: {requiresAuth: true}
   },
   {
     path: '/trainee/:id',
     name: 'Trainee Profile',
-    component: TraineeInfo
+    component: TraineeInfo,
+    meta: {requiresAuth: true}
   },
   {
     path: '/pharmacydashboard',
     name: 'Pharmacy Dashboard',
-    component: PharmacyDashboard
+    component: PharmacyDashboard,
+    meta: {requiresAuth: true}
   }
 ];
 
@@ -72,10 +77,17 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  if(to.name === 'ContactUs' || to.name === 'About') { 
+    next();
+    return;
+  }
+
   const requiresAuth =  to.matched.some(record => record.meta.requiresAuth);
   const isAuthenticated =  firebase.auth().currentUser;
   if  (requiresAuth && !isAuthenticated) {
-    next('/landing');
+    next('/');
+  } else if (!requiresAuth && isAuthenticated) {
+    next('/home');
   } else {
     next();
   }
