@@ -35,7 +35,7 @@ export default {
     onPharmacyClick() {
       this.selectPharmacy(this.pharmacy);
       // bus.$emit('pharmacy_data', this.pharmacy);
-      this.$router.push(`/pharmacy/${this.pharmacy.name}`)
+      this.$router.push(`/pharmacy/${this.pharmacy.uuid}`)
     }
   }
 };
