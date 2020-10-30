@@ -9,30 +9,31 @@
         <div class="yellow-div">
           <h3 class="title">Contact Us</h3>
           <div class="social-wrapper">
-            <p><img src="../assets/phone_white.png" alt=""></p>
-            <p>+962 9825367222</p>
+            <img class="icon" src="../assets/facebook_white.png" alt="">
+            <p class="text">@pharmaphilie</p>
           </div>
           <div class="social-wrapper">
-            <p><img src="../assets/email_white.png" alt=""></p>
-            <p>@pharmaphilie</p>
+            <img class="icon" src="../assets/instagram_white.png" alt="">
+            <p class="text">@pharmaphilie</p>
           </div>
           <div class="social-wrapper">
-            <p><img src="../assets/linkedin_white.png" alt=""></p>
-            <p>@pharmaphilie</p>
+            <img class="icon" src="../assets/linkedin_white.png" alt="">
+            <p class="text">@pharmaphilie</p>
           </div>
-          <div class="social-wrapper">
-            <p><img src="../assets/facebook_white.png" alt=""></p>
-            <p>@pharmaphilie</p>
+            <div class="social-wrapper">
+            <img class="icon" src="../assets/email_white.png" alt="">
+            <p class="text">@pharmaphilie</p>
           </div>
+
           <div class="social-wrapper">
-            <p><img src="../assets/instagram_white.png" alt=""></p>
-            <p>@pharmaphilie</p>
+            <img class="icon" src="../assets/phone_white.png" alt="">
+            <p class="text">+962 9825367222</p>
           </div>
         </div>
         <div class="white-div">
           <div class="innerWrapper">
             <img alt="" class="logo" src="../assets/logo.png" width="250">
-            <p>Feel free to contact us ! Submit your question here and we will get back to you soon.</p>
+            <p class="text">Feel free to contact us ! Submit your question here and we will get back to you soon.</p>
             <div id="students-div" class="form-group">
               <Label class="form-label" for="students"> Name </Label>
               <input id="students" class="form-control pharmaInputGold center-margin small" max="5" min="2"
@@ -173,7 +174,15 @@ export default {
       display: flex;
       flex-direction: row;
       margin: 5px;
+      align-items: center;
 
+      .icon {
+          width: 42px;
+      }
+      .text {
+        width: 160px;
+        text-align: left;
+      }
       p:nth-child(2) {
         margin-left: 15px;
         font-family: Roboto;
@@ -195,8 +204,8 @@ export default {
     width: 90%;
     display: flex;
     flex-direction: column;
-
     padding: 10px;
+
     .signUpButton {
       background: #FFC200;
       box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -274,7 +283,6 @@ export default {
         display: flex;
         flex-direction: row;
         margin: 5px;
-
         p:nth-child(2) {
           margin-left: 15px;
           font-family: Roboto;
