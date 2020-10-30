@@ -1,7 +1,7 @@
 <template>
-  <div class="wrapper min-vh-100 min-vw-100 p-0 m-0">
-  zzzzz {{ $store.getters.getUserProfile}}
-    <div class="container min-vw-100 p-0 mb-5">
+  <div class="d-flex flex-column h-100">
+
+    <div class="container min-vw-100 p-0 mb-5 h-100">
       <div class=" min-vw-100">
         <navbar></navbar>
       </div>

@@ -11,6 +11,10 @@
   padding: 0;
 }
 
+html {
+  height:100%;
+}
+
 body {
   height: 100%;
   //background: url("~@/assets/bg.png") no-repeat center;
@@ -18,6 +22,7 @@ body {
 }
 
 #app {
+  height:100%;
   font-family: "Open Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
