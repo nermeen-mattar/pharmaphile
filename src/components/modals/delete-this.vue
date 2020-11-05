@@ -13,12 +13,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-.login-reg-modal-wrapper {
-  .v--modal-box {
-    max-height: 100vh;
-    overflow: scroll !important;
-  }
-}
-</style>
