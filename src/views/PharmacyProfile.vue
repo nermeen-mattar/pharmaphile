@@ -7,34 +7,34 @@
       <div class="pic"></div>
     </div>
     <div class="profile-container">
-      <div v-if="info" class="info">
-        <img :src="info.imageUrl" alt="" class="info-image">
-        <h3 class="info-pharmacy-name">{{ info.name }}</h3>
+      <div v-if="$store.getters.selectedPharmacy" class="info">
+        <img :src="$store.getters.selectedPharmacy.imageUrl" alt="" class="info-image">
+        <h3 class="info-pharmacy-name">{{ $store.getters.selectedPharmacy.name }}</h3>
         <h4 class="info-pharmacy">Pharmacy</h4>
         <div class="info-box">
           <div class="social-wrapper">
             <p><img alt="" src="../assets/manager.png"></p>
-            <p>Manager: {{ info.manager }}</p>
+            <p>Manager: {{ $store.getters.selectedPharmacy.manager }}</p>
           </div>
           <div class="social-wrapper">
             <p><img alt="" src="../assets/phone_black.png"></p>
-            <p>Pharmacy number: {{ info.phone }}</p>
+            <p>Pharmacy number: {{ $store.getters.selectedPharmacy.phone }}</p>
           </div>
           <div class="social-wrapper">
             <p><img alt="" src="../assets/email_black.png"></p>
-            <p>Email: {{ info.email }}</p>
+            <p>Email: {{ $store.getters.selectedPharmacy.email }}</p>
           </div>
           <div class="social-wrapper">
             <p><img alt="" src="../assets/city.png"></p>
-            <p>City: {{ info.city }}</p>
+            <p>City: {{ $store.getters.selectedPharmacy.city }}</p>
           </div>
           <div class="social-wrapper">
             <p><img alt="" src="../assets/address.png"></p>
-            <p>Address: {{ info.address }}</p>
+            <p>Address: {{ $store.getters.selectedPharmacy.address }}</p>
           </div>
           <div class="social-wrapper">
             <p><img alt="" src="../assets/no_students.png"></p>
-            <p>Number of students: {{ info.noOfStudents }}</p>
+            <p>Number of students: {{ $store.getters.selectedPharmacy.noOfStudents }}</p>
           </div>
           <div style="grid-column: 1/3">
             <rate :length="5" :readonly="true" :value="3" style="margin: 0 auto"></rate>
@@ -114,7 +114,6 @@ export default {
   data() {
     return {
       name: 'PharmacyProfile',
-      info: null,
       ratingInfo: {
         name: this.$store.getters.getUserProfile.name,
         description: '',
@@ -141,15 +140,6 @@ export default {
     ...mapActions(['getTrainings', 'getReviews', 'getPharmacyById', 'applyOnTraining', 'selectPharmacy', 'addReview']),
 
     /**
-     *
-     * @param data
-     */
-    onPharmacyDataReceived(data) {
-      console.log('Data', data);
-      this.info = data;
-    },
-
-    /**
      * @event onclick
      */
     submitReview() {
@@ -159,9 +149,9 @@ export default {
       this.ratingInfo.description = '';
       this.ratingInfo.rate = 0;
       this.getReviews(this.$store.state.selectedPharmacy)
-        .then((data) => {
-          this.info = this.$store.state.selectedPharmacy;
-          this.info.reviews = data;
+        .then(() => {
+          // this.info = this.$store.state.selectedPharmacy;
+          // this.info.reviews = data;
           console.log('Trainings', this.$store.state.selectedPharmacy);
         });
     },
@@ -206,8 +196,11 @@ export default {
         this.selectPharmacy(pharmacyObj);
         this.ratingInfo.uuid = pharmacyObj.uuid; /* fix unable to add review after refreshing */
       });
+    /* followin gare covered in selectPharmacy */
+    // this.$store.dispatch('search'); /* to set pharmacies in state before filtering related pharmacies*/
+    // this.$store.dispatch('getRelatedPharmacies');
 
-
+    /* old code */
     // this.getReviews(this.$store.state.selectedPharmacy)
     //   .then((data) => {
     //     this.info = this.$store.state.selectedPharmacy;
@@ -221,7 +214,7 @@ export default {
     //   });
   },
   mounted() {
-    this.info = {}; // this.$store.getters.selectedPharmacy;  undefined when refresh
+    // this.info = {}; // this.$store.getters.selectedPharmacy;  undefined when refresh
     bus.$on('pharmacy_data', (payload) => {
       console.log(payload);
     });

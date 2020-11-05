@@ -35,7 +35,10 @@ export default {
     onPharmacyClick() {
       this.selectPharmacy(this.pharmacy);
       // bus.$emit('pharmacy_data', this.pharmacy);
-      this.$router.push(`/pharmacy/${this.pharmacy.uuid}`)
+      this.$router.push(`/pharmacy/${this.pharmacy.uuid}`).catch(()=>{}); 
+      /* followin gare covered in selectPharmacy */
+      // this.$store.dispatch('search');  /* to reset the pharmacies state */
+      // this.$store.dispatch('getRelatedPharmacies'); /* to update the related pharmacies */
     }
   }
 };
