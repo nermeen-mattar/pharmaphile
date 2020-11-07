@@ -15,8 +15,8 @@
       <div class="pharmacy-info">
         <p class="icon-phone info">{{ pharmacy.phone }}</p>
       </div>
-      <div class="rating">
-        <rate :length="5" :value="2"/>
+      <div class="rating" v-if="pharmacy.rate">
+        <rate :length="5" :value="pharmacy.rate"/>
       </div>
     </div>
   </div>
@@ -53,6 +53,7 @@ export default {
   box-sizing: border-box;
   box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.25);
   width: auto;
+  height: 430px;
 
   .icon-person::before {
     width: 25px;

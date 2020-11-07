@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import * as fb from '../http/firebase/firebase';
 import router from '../router/index';
+import Helpers from './helpers';
 
 Vue.use(Vuex);
 
@@ -78,6 +79,14 @@ export default new Vuex.Store({
         return [];
       }
     },
+        /**
+     *
+     * @param state
+     * @returns {*[]}
+     */
+    relatedPharmacies(state) {
+      state.pharmacies = state.pharmacies.filter(pharmacy => pharmacy.uuid !== state.selectedPharmacy.uuid);
+    },
 
     /**
      *
@@ -95,7 +104,6 @@ export default new Vuex.Store({
      */
     setSelectedPharmacy(state, pharmacy) {
       state.selectedPharmacy = pharmacy;
-      console.log(pharmacy);
     },
 
     /**
@@ -199,8 +207,9 @@ export default new Vuex.Store({
      * @returns {Promise<void>}
      */
     async getStudents({ commit }, pharmacy) {
+      const uid = fb.auth.currentUser.uid;
       let students = [];
-      await fb.pharmaciesCollection.doc(pharmacy.uuid)
+      await fb.pharmaciesCollection.doc(uid) // was pharmacy.uuid ???
         .collection('students')
         .get()
         .then(querySnapshot => {
@@ -256,7 +265,8 @@ export default new Vuex.Store({
       commit('setSelectedPharmacy', pharmacy);
       dispatch('getReviews', pharmacy);
       dispatch('getTrainings', pharmacy);
-      console.log(pharmacy);
+      dispatch('search'); /* to set pharmacies in state before filtering related pharmacies*/
+      dispatch('getRelatedPharmacies');
     },
 
     /**
@@ -268,30 +278,36 @@ export default new Vuex.Store({
       commit('setSelectedTrainee', trainee)
     },
 
-
     /**
      * @param dispatch
      * @param form
      * @returns {Promise<void>}
      */
     async addReview({ dispatch }, payload) {
-      await fb.pharmaciesCollection.doc(payload.uuid)
-      .collection('reviews').doc().set(JSON.parse(JSON.stringify(payload)));
-      // dispatch('getReviews', pharmacy); // ??? not needed
+      const pharmacyDoc = fb.pharmaciesCollection.doc(payload.pharmacyId);
+      const docRef = await pharmacyDoc.get();
+      const pharmacyObj = docRef.data();
+      const reviewsCollection =  pharmacyDoc.collection('reviews');
+      const querySnapshot = await reviewsCollection.get();
+      pharmacyObj.rate = Helpers.getRate(pharmacyObj.rate, querySnapshot.size, payload.rate);
+      pharmacyDoc.set(pharmacyObj);
+      await reviewsCollection.doc().set(payload); // may need await so that when getReviews is called it has last update
+      // dispatch('getReviews', pharmacyObj); covered in following line
+      dispatch('selectPharmacy', pharmacyObj);
     },
 
-    /**
-     * @param review
-     * @param commit
-     * @returns {Promise<void>}
-     */
-    async submitReview({ commit }, review) {
-      await fb.pharmaciesCollection.doc(review.uid) // state.selectedPharmacy.uuid???
-        .collection('reviews')
-        .doc() // review.uid + review.description.trim() ???
-        .set(review);
-      commit('setAnything', '2'); // why ???
-    },
+    // /**
+    //  * @param review
+    //  * @param commit
+    //  * @returns {Promise<void>}
+    //  */
+    // async submitReview({ commit }, review) {
+    //   await fb.pharmaciesCollection.doc(review.uid) // state.selectedPharmacy.uuid???
+    //     .collection('reviews')
+    //     .doc(review.uid + review.description.trim())
+    //     .set(review);
+    //   commit('setAnything', '2'); // why ???
+    // },
 
     /**
      * @description Submits a training in the user model and the pharmacy model
@@ -529,6 +545,22 @@ export default new Vuex.Store({
           commit('searchPharmacies', {
             documents,
             payload
+          });
+        });
+    },
+  
+    /**
+     *
+     * @param commit
+     * @param payload
+     * @returns {Promise<void>}
+     */
+    async getRelatedPharmacies({ commit }) {
+      await fb.pharmaciesCollection.get()
+        .then(querySnapshot => {
+          const documents = querySnapshot.docs.map(doc => doc.data());
+          commit('relatedPharmacies', {
+            documents
           });
         });
     }

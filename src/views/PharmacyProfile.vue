@@ -36,8 +36,8 @@
             <p><img alt="" src="../assets/no_students.png"></p>
             <p>Number of students: {{ $store.getters.selectedPharmacy.noOfStudents }}</p>
           </div>
-          <div style="grid-column: 1/3">
-            <rate :length="5" :readonly="true" :value="3" style="margin: 0 auto"></rate>
+          <div style="grid-column: 1/3" v-if="$store.getters.selectedPharmacy.rate">
+            <rate :length="5" :readonly="true" :value="Math.round($store.getters.selectedPharmacy.rate)" style="margin: 0 auto"></rate>
           </div>
         </div>
       </div>
@@ -119,7 +119,6 @@ export default {
         description: '',
         imageUrl: this.$store.getters.getUserProfile.imageUrl ? this.$store.getters.getUserProfile.imageUrl : this.$store.getters.selectedPharmacy.imageUrl,
         rate: 0,
-        uuid: this.$store.getters.selectedPharmacy.uuid // ??? uid or uuid - undefined after refreshing
       }
     };
   },
@@ -144,7 +143,8 @@ export default {
      */
     submitReview() {
       // this.$store.dispatch('submitReview', this.ratingInfo);
-      this.$store.dispatch('addReview', this.ratingInfo);
+      this.$store.dispatch('addReview', {...JSON.parse(JSON.stringify(this.ratingInfo)), 
+      pharmacyId: this.$store.getters.selectedPharmacy.uuid});
       this.$toast.success('Submitted!');
       this.ratingInfo.description = '';
       this.ratingInfo.rate = 0;
@@ -194,7 +194,6 @@ export default {
     this.getPharmacyById(this.$route.params.id).then(pharmacyObj => {
               this.info = pharmacyObj;
         this.selectPharmacy(pharmacyObj);
-        this.ratingInfo.uuid = pharmacyObj.uuid; /* fix unable to add review after refreshing */
       });
     /* followin gare covered in selectPharmacy */
     // this.$store.dispatch('search'); /* to set pharmacies in state before filtering related pharmacies*/
