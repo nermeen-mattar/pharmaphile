@@ -67,7 +67,8 @@
         </div>
         <div v-else>
 
-          <form @submit.prevent="pharmacySignup">
+          <form>
+          <!--  @submit.prevent="pharmacySignup"-->
 
             <div id="pharmacy-name-div" class="form-group">
               <Label class="form-label" for="name"> Pharmacy Name </Label>
@@ -169,6 +170,7 @@
 
 <script>
 import firebase from 'firebase';
+/* eslint-disable */ 
 
 export default {
   data() {
@@ -194,13 +196,11 @@ export default {
         imageUrl: '',
         noOfStudents: '',
         confirmPassword: '',
-        error: ''
       },
       traineeRegisterForm: {
         name: '',
         email: '',
         password: '',
-        error: '',
         phone: '',
         university_number: '',
         university: '',
@@ -253,60 +253,55 @@ export default {
           console.log(err);
         });
     },
+    validateForm(formValue) {
+      const keyNames = Object.keys(formValue);
+      for(let i=0; i<keyNames.length; i++ ) {
+          if(!formValue[keyNames[i]]) {
+            this.$toast.error('You must fill in all the fields');
+            return false;
+          }
+      }
+      if (formValue.password !== formValue.confirmPassword) {
+          this.$toast.error('Password not matched!');
+          return false;
+      }
+      return true;
+    },
+
     formSubmitted() {
       this.pharmaRegisterForm.imageUrl = 'https://firebasestorage.googleapis.com/v0/b/pharmaphile-dca83.appspot.com/o/user.png?alt=media&token=cad4580e-a9c9-4007-8373-0470e44b8ec6';
+      const formValue = this.isTrainee ? this.traineeRegisterForm : this.pharmaRegisterForm;
+      if(!this.validateForm(formValue)) {
+        return;
+      }
       if (this.isTrainee) {
-        if (this.traineeRegisterForm.password === this.traineeRegisterForm.confirmPassword) {
           this.$store.dispatch('signup', {
             isTrainee: true,
-            email: this.traineeRegisterForm.email,
-            name: this.traineeRegisterForm.name,
-            password: this.traineeRegisterForm.password,
-            phone: this.traineeRegisterForm.phone,
-            university_number: this.traineeRegisterForm.university_number,
-            university: this.traineeRegisterForm.university,
+            email: formValue.email,
+            name: formValue.name,
+            password: formValue.password,
+            phone: formValue.phone,
+            university_number: formValue.university_number,
+            university: formValue.university,
             toastObject: this.$toast
           });
-        } else {
-          this.$toast.error('Password not matched!');
-        }
-      } else {
-        if (this.pharmaRegisterForm.password === this.pharmaRegisterForm.confirmPassword) {
+        } 
+        else {
           this.$store.dispatch('signup', {
             isTrainee: false,
-            email: this.pharmaRegisterForm.email,
-            name: this.pharmaRegisterForm.name,
-            password: this.pharmaRegisterForm.password,
-            phone: this.pharmaRegisterForm.phone,
-            manager: this.pharmaRegisterForm.manager,
-            imageUrl: this.pharmaRegisterForm.imageUrl,
-            city: this.pharmaRegisterForm.city,
-            noOfStudents: this.pharmaRegisterForm.noOfStudents,
-            address: this.pharmaRegisterForm.address,
+            email: formValue.email,
+            name: formValue.name,
+            password: formValue.password,
+            phone: formValue.phone,
+            manager: formValue.manager,
+            imageUrl: formValue.imageUrl,
+            city: formValue.city,
+            noOfStudents: formValue.noOfStudents,
+            address: formValue.address,
             toastObject: this.$toast
           });
-        } else {
-          this.$toast.error('Password not matched!');
-        }
       }
     },
-
-    pharmacySignup() {
-      if (this.traineeRegisterForm.password === this.traineeRegisterForm.confirmPassword) {
-        this.$store.dispatch('signup', {
-          email: this.traineeRegisterForm.email,
-          name: this.traineeRegisterForm.name,
-          password: this.traineeRegisterForm.password,
-          phone: this.traineeRegisterForm.phone,
-          university_number: this.traineeRegisterForm.university_number,
-          university: this.traineeRegisterForm.university,
-          toastObject: this.$toast
-        });
-      } else {
-        this.$toast.error('Password not matched!');
-      }
-    },
-
     onOptionSelect(event) {
       event.target.value === '2' ? this.isTrainee = false : this.isTrainee = true;
     }
