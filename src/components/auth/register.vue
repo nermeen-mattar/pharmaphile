@@ -170,6 +170,9 @@
 
 <script>
 import firebase from 'firebase';
+import Helpers from '../../services/helpers';
+
+
 /* eslint-disable */ 
 
 export default {
@@ -253,25 +256,10 @@ export default {
           console.log(err);
         });
     },
-    validateForm(formValue) {
-      const keyNames = Object.keys(formValue);
-      for(let i=0; i<keyNames.length; i++ ) {
-          if(!formValue[keyNames[i]]) {
-            this.$toast.error('You must fill in all the fields');
-            return false;
-          }
-      }
-      if (formValue.password !== formValue.confirmPassword) {
-          this.$toast.error('Password not matched!');
-          return false;
-      }
-      return true;
-    },
-
     formSubmitted() {
       this.pharmaRegisterForm.imageUrl = 'https://firebasestorage.googleapis.com/v0/b/pharmaphile-dca83.appspot.com/o/user.png?alt=media&token=cad4580e-a9c9-4007-8373-0470e44b8ec6';
       const formValue = this.isTrainee ? this.traineeRegisterForm : this.pharmaRegisterForm;
-      if(!this.validateForm(formValue)) {
+      if(!Helpers.validateForm(formValue)) {
         return;
       }
       if (this.isTrainee) {
@@ -282,8 +270,7 @@ export default {
             password: formValue.password,
             phone: formValue.phone,
             university_number: formValue.university_number,
-            university: formValue.university,
-            toastObject: this.$toast
+            university: formValue.university
           });
         } 
         else {
@@ -297,8 +284,7 @@ export default {
             imageUrl: formValue.imageUrl,
             city: formValue.city,
             noOfStudents: formValue.noOfStudents,
-            address: formValue.address,
-            toastObject: this.$toast
+            address: formValue.address
           });
       }
     },

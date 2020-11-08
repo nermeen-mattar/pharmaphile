@@ -13,7 +13,7 @@
           <input id="pharmacy-image" ref="input1" accept="image/*"
                  class="form-control pharmaInput center-margin small"
                  name="image" type="file" @change="previewImage" hidden>
-          <img alt="Profile Image" class="m-4 round-image" height="72" :src="$store.getters.getUserProfile.imageUrl || '../assets/dummyProfile.png'" width="72" >
+          <img alt="Profile Image" class="m-4 round-image" height="72" :src="pharmaRegisterForm.imageUrl || '../assets/dummyProfile.png'" width="72" >
           <button @click="$refs['input1'].click()"  class="btn signUpButton center-margin">Upload Image</button>
         </div>
 
@@ -170,6 +170,7 @@
 import Navbar from '@/components/navigation/NavbarComponent';
 import FooterComponent from '@/components/footer/FooterComponent';
 import firebase from 'firebase';
+import Helpers from '../services/helpers';
 
 export default {
   components: {
@@ -193,14 +194,12 @@ export default {
         address: '',
         imageUrl: '',
         noOfStudents: '',
-        confirmPassword: '',
-        error: ''
+        confirmPassword: ''
       },
       traineeRegisterForm: {
         name: '',
         email: '',
         password: '',
-        error: '',
         imageUrl: '',
         about: '',
         phone: '',
@@ -213,12 +212,11 @@ export default {
   },
   methods: {
     onSubmitClicked() {
-      if (this.$store.getters.getUserProfile.isTrainee) {
-        this.$store.dispatch('updateUser', this.traineeRegisterForm)
-      } else {
-        this.$store.dispatch('updateUser', this.pharmaRegisterForm)
+      const formValue = this.$store.getters.getUserProfile.isTrainee ? this.traineeRegisterForm : this.pharmaRegisterForm;
+      if(Helpers.validateForm(formValue)) {
+        this.$store.dispatch('updateUser', formValue);
+        this.$toast.success("Updated!");
       }
-      this.$toast.success("Updated!");
     },
     onUpload() {
       this.img1 = null;
@@ -243,20 +241,23 @@ export default {
       );
     },
     previewImage(event) {
+      if (event.target.files[0].size/1000 > 5500) { // image should be less than 5.5 MB
+        this.$toast.error('Image is too big, please upload smaller image.')
+        return;
+      }
       this.uploadValue = 0;
       this.img1 = null;
       this.imageData = event.target.files[0];
-      this.onUpload();
-      console.log('Preview Image');
+      // this.pharmaRegisterForm.imageUrl = event.target.value; didn't work
+      this.onUpload(); // ??? should remove this, image should only be uploaded to firebase when the user submits
     }
   },
   created() {
+    const userProfile = Object.assign({}, this.$store.getters.getUserProfile);
     if (this.$store.getters.getUserProfile.isTrainee) {
-      this.traineeRegisterForm = this.$store.getters.getUserProfile;
-      console.log('trainee');
+      this.traineeRegisterForm = userProfile;
     } else {
-      this.pharmaRegisterForm = this.$store.getters.getUserProfile;
-      console.log('pharmacy');
+      this.pharmaRegisterForm = userProfile;
     }
   }
 };

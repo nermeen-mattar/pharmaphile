@@ -100,7 +100,6 @@ export default {
       this.$store.dispatch('login', {
         email: this.loginForm.email,
         password: this.loginForm.password,
-        toastObject: this.$toast
       });
     },
 

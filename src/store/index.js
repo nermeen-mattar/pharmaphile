@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import * as fb from '../http/firebase/firebase';
 import router from '../router/index';
-import Helpers from './helpers';
+import Helpers from '../services/helpers';
 
 Vue.use(Vuex);
 
@@ -407,16 +407,14 @@ export default new Vuex.Store({
      * @returns {Promise<void>}
      */
     async login({ dispatch }, form) {
-      const toast = form.toastObject;
-      delete form.toastObject;
       try {
         const { user } = await fb.auth.signInWithEmailAndPassword(form.email, form.password);
         dispatch('fetchUserProfile', user);
       } catch (e) {
-        if(e.code === 'auth/user-not-found') {
-          e.message = 'The username or password is incorrect.';
-        }
-        toast.error(e.message);
+        // if(e.code === 'auth/user-not-found') {
+        //   e.message = 'The username or password is incorrect.';
+        // }
+        Vue.$toast.error('The username or password is incorrect.'); // was e.message
       }
     },
 
@@ -493,10 +491,7 @@ export default new Vuex.Store({
      * @returns {Promise<void>}
      */
     async signup({ dispatch }, form) {
-      const toast = form.toastObject; 
       try {
-        delete form.toastObject;
-
       // sign user up
       const { user } = await fb.auth.createUserWithEmailAndPassword(form.email, form.password);
 
@@ -535,7 +530,7 @@ export default new Vuex.Store({
 
       }
     } catch(e) {
-      toast.error(e.message);
+      Vue.$toast.error(e.message);
     }
 
       // fetch user profile and set in state
