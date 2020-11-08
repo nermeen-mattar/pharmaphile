@@ -206,7 +206,7 @@ export default new Vuex.Store({
      * @param pharmacy
      * @returns {Promise<void>}
      */
-    async getStudents({ commit }, pharmacy) {
+    async getStudents({ commit }) { // , pharmacy
       const uid = fb.auth.currentUser.uid;
       let students = [];
       await fb.pharmaciesCollection.doc(uid) // was pharmacy.uuid ???
@@ -407,8 +407,17 @@ export default new Vuex.Store({
      * @returns {Promise<void>}
      */
     async login({ dispatch }, form) {
-      const { user } = await fb.auth.signInWithEmailAndPassword(form.email, form.password);
-      dispatch('fetchUserProfile', user);
+      const toast = form.toastObject;
+      delete form.toastObject;
+      try {
+        const { user } = await fb.auth.signInWithEmailAndPassword(form.email, form.password);
+        dispatch('fetchUserProfile', user);
+      } catch (e) {
+        if(e.code === 'auth/user-not-found') {
+          e.message = 'The username or password is incorrect.';
+        }
+        toast.error(e.message);
+      }
     },
 
     /**
