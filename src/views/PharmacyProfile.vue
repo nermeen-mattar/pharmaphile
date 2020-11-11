@@ -118,7 +118,7 @@ export default {
         name: this.$store.getters.getUserProfile.name,
         description: '',
         imageUrl: this.$store.getters.getUserProfile.imageUrl ? this.$store.getters.getUserProfile.imageUrl : this.$store.getters.selectedPharmacy.imageUrl,
-        rate: 0,
+        rate: 5,
       }
     };
   },
@@ -147,7 +147,7 @@ export default {
       pharmacyId: this.$store.getters.selectedPharmacy.uuid});
       this.$toast.success('Submitted!');
       this.ratingInfo.description = '';
-      this.ratingInfo.rate = 0;
+      this.ratingInfo.rate = 5;
       this.getReviews(this.$store.state.selectedPharmacy)
         .then(() => {
           // this.info = this.$store.state.selectedPharmacy;

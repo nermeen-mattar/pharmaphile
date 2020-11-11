@@ -16,7 +16,7 @@
       <br>
       <br>
       <br>
-      <div class="row" v-if="searched">
+      <div class="row justify-content-center" v-if="searched">
         <pharmacy-list></pharmacy-list>
       </div>
       <br>

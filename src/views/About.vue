@@ -105,5 +105,14 @@ export default {
 .icon-image img {
   //border: 1px solid darkgreen;
 }
+
+/*
+    Phone
+ */
+@media only screen and (max-width: 992px) {
+  .how-img img {
+    width: 100%;
+  }
+}
 </style>
 

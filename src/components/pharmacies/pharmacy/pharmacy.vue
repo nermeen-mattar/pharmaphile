@@ -53,7 +53,7 @@ export default {
   box-sizing: border-box;
   box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.25);
   width: auto;
-  height: 430px;
+  height: 440px;
   margin: 10px;
   .icon-person::before {
     width: 25px;
