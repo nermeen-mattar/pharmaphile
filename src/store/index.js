@@ -60,6 +60,29 @@ export default new Vuex.Store({
     setUserTrainings(state, val) {
       state.userTrainings = val;
     },
+    /**
+     *
+     * @param state
+     * @param pharmacies
+     * @returns {*[]}
+     */
+    filterPharmacies(state, pharmacies) {
+      const allPharmacies = pharmacies?.documents;
+      let searchValue = pharmacies.payload.value;
+      if (allPharmacies) {
+        if(!searchValue || searchValue.trim() === '') { // empty search value
+          state.pharmacies = allPharmacies;
+        }
+        state.pharmacies = allPharmacies.filter(pharmacy => {
+          const pharmacyName = pharmacy.city;
+          return pharmacyName.includes(searchValue) ||
+          searchValue.includes(pharmacyName)
+          ? pharmacy : '';
+        });
+      } else {
+        return [];
+      }
+    },
 
     /**
      *
@@ -568,6 +591,23 @@ export default new Vuex.Store({
         .then(querySnapshot => {
           const documents = querySnapshot.docs.map(doc => doc.data());
           commit('searchPharmacies', {
+            documents,
+            payload
+          });
+        });
+    },
+
+    /**
+     *
+     * @param commit
+     * @param payload
+     * @returns {Promise<void>}
+     */
+    async filter({ commit }, payload) {
+      await fb.pharmaciesCollection.get()
+        .then(querySnapshot => {
+          const documents = querySnapshot.docs.map(doc => doc.data());
+          commit('filterPharmacies', {
             documents,
             payload
           });

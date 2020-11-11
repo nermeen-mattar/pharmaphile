@@ -16,7 +16,6 @@
         :colorScale="colorScale"
         :data="$store.state.mapData"
         :geojson="geoJSON"
-        @mouseover="console.log('Modde')"
         :value="value"
         idKey="cityId"
         geojson-id-key="dpto"
@@ -93,17 +92,19 @@ export default {
     onReady() {
       this.map = this.$refs.myMap.mapObject;
       this.map.onclick = (e) => {
-        debugger;
         console.log(e);
         if (e.path[0] && e.path[0]._leaflet_id) {
           this.querySelection(e.path[0]._leaflet_id);
         }
       };
       this.map.on('click',  (e) => {
-                debugger;
-
+          const cityEl = document.querySelector('.leaflet-control.info');
+          const cityNameEl = cityEl && cityEl.querySelector('b');
+        if(cityNameEl) {
+            this.$store.dispatch('filter', {filterType:'city', value:  cityNameEl.innerText});
+        }
         console.log(this.map);
-        console.log(e);
+        console.log('e', e);
         if (e.path && e.path[0]._leaflet_id) {
           this.querySelection(e.path[0]._leaflet_id);
         }
@@ -136,8 +137,6 @@ function zoomToFeature(e) {
 }
 
 function highlightFeature(e) {
-          debugger;
-
   var layer = e.target;
 
   layer.setStyle({

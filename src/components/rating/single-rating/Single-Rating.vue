@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <img class="image" :src="rating.imageUrl" alt="Image">
-    <div class="info">
+    <div class="name-desc">
       <h3 class="name">{{rating.name}}</h3>
       <p class="description">{{rating.description}}</p>
     </div>
@@ -40,7 +40,7 @@ export default {
       border-radius: 50%;
       border: 7px solid $pharma_yellow;
     }
-    .info {
+    .name-desc {
       text-align: left;
       .name {
         font-size: 22px;

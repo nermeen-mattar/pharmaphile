@@ -7,7 +7,7 @@
       <div class="pic"></div>
     </div>
     <div class="profile-container">
-      <div class="info">
+      <div class="trainee-info">
         <img class="info-image" :src="$store.getters.selectedTrainee.user.imageUrl || '../assets/dummyProfile.png'" alt="">
         <h3 class="info-pharmacy-name">{{$route.params.id}}</h3>
         <h4 class="info-pharmacy">Trainee</h4>
@@ -200,7 +200,7 @@ table {
 }
 
 .profile-container {
-  .info {
+  .trainee-info {
 
     .info-image {
       margin-top: -130px;

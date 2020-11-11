@@ -7,7 +7,7 @@
       <div class="pic"></div>
     </div>
     <div class="profile-container">
-      <div v-if="$store.getters.selectedPharmacy" class="info">
+      <div v-if="$store.getters.selectedPharmacy" class="pharmacy-info">
         <img :src="$store.getters.selectedPharmacy.imageUrl" alt="" class="info-image">
         <h3 class="info-pharmacy-name">{{ $store.getters.selectedPharmacy.name }}</h3>
         <h4 class="info-pharmacy">Pharmacy</h4>
@@ -270,7 +270,7 @@ table {
 }
 
 .profile-container {
-  .info {
+  .pharmacy-info {
 
     .info-image {
       max-width: 300px;
