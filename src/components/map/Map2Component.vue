@@ -5,20 +5,30 @@
       :center="[30.5852, 36.2384]"
       :options="mapOptions"
       :zoom="7"
+      :minZoom="7"
+      :maxBounds="[
+        [29.05, 34.9226025734],
+       [33.3786864284, 39.1954683774]
+      ]"
       @ready="onReady()">
       <l-choropleth-layer
+        id-key="cityId"
         :colorScale="colorScale"
-        :data="items"
-        :geojson="paraguayGeojson"
+        :data="$store.state.mapData"
+        :geojson="geoJSON"
         @mouseover="console.log('Modde')"
         :value="value"
-        geojsonIdKey="dpto"
-        idKey="department_id"
-        titleKey="department_name">
+        idKey="cityId"
+        geojson-id-key="dpto"
+        titleKey="cityName">
         <!--        <template slot-scope="props">-->
         <!--          <l-info-control :item="props.currentItem" :unit="props.unit" title="Jordan Cities" placeholder="Hover over a city"/>-->
         <!--          <l-reference-chart title="Pharmacies in Jordan" :colorScale="colorScale" :min="props.min" :max="props.max" position="topright"/>-->
         <!--        </template>-->
+                   <template slot-scope="props">
+                            <l-info-control :item="props.currentItem" :unit="props.unit" title="City" placeholder="Hover over a city" position="topright">
+                            </l-info-control>
+                    </template>
       </l-choropleth-layer>
     </l-map>
     <search-component></search-component>
@@ -30,8 +40,8 @@
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import axios from 'axios';
-import { pyDepartmentsData } from './data/py-departments-data';
-import paraguayGeojson from './data/paraguay.json';
+import { citiesData } from './data/cities-data';
+import geoJSON from './data/geo-data.json';
 import { InfoControl, ReferenceChart, ChoroplethLayer } from 'vue-choropleth';
 import { LMap } from 'vue2-leaflet';
 import SearchComponent from '@/components/search/SearchComponent';
@@ -41,13 +51,11 @@ export default {
   data() {
     return {
       info: L.control(),
-      geojson: null,
-      items: [],
-      paraguayGeojson,
+      geoJSON,
       colorScale: ['e7d090', 'e9ae7b', 'de7062'],
       value: {
-        key: 'amount_w',
-        metric: ': pharmacies'
+        key: 'pharmaciesCount',
+        metric: ' pharmacies'
       },
       mapOptions: {
         style: function style(feature) {
@@ -63,6 +71,7 @@ export default {
       map: null,
       latlng: [],
       mounted: false,
+      citiesData
     };
   },
   components: {
@@ -84,12 +93,15 @@ export default {
     onReady() {
       this.map = this.$refs.myMap.mapObject;
       this.map.onclick = (e) => {
+        debugger;
         console.log(e);
         if (e.path[0] && e.path[0]._leaflet_id) {
           this.querySelection(e.path[0]._leaflet_id);
         }
       };
       this.map.on('click',  (e) => {
+                debugger;
+
         console.log(this.map);
         console.log(e);
         if (e.path && e.path[0]._leaflet_id) {
@@ -124,6 +136,8 @@ function zoomToFeature(e) {
 }
 
 function highlightFeature(e) {
+          debugger;
+
   var layer = e.target;
 
   layer.setStyle({

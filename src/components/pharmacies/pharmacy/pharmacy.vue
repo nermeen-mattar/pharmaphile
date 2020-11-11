@@ -4,16 +4,16 @@
     <div class="innerWrapper">
       <h3 class="pharmacy-title">{{ pharmacy.name }}</h3>
       <div class="pharmacy-info">
-        <p class="icon-person info">{{ pharmacy.manager }}</p>
+        <p class="icon-person pharmacy-info-text">{{ pharmacy.manager }}</p>
       </div>
       <div class="pharmacy-info">
-        <p class="icon-location info">{{pharmacy.address}}</p>
+        <p class="icon-location pharmacy-info-text">{{pharmacy.address}}</p>
       </div>
       <div class="pharmacy-info">
-        <p class="icon-email info">{{ pharmacy.email }}</p>
+        <p class="icon-email pharmacy-info-text">{{ pharmacy.email }}</p>
       </div>
       <div class="pharmacy-info">
-        <p class="icon-phone info">{{ pharmacy.phone }}</p>
+        <p class="icon-phone pharmacy-info-text">{{ pharmacy.phone }}</p>
       </div>
       <div class="rating" v-if="pharmacy.rate">
         <rate :length="5" :value="pharmacy.rate"/>
@@ -54,7 +54,7 @@ export default {
   box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.25);
   width: auto;
   height: 430px;
-
+  margin: 10px;
   .icon-person::before {
     width: 25px;
     height: 25px;
@@ -111,7 +111,7 @@ export default {
     justify-content: flex-start;
     align-items: center;
 
-    .info {
+    .pharmacy-info-text {
       font-family: Roboto;
       font-style: normal;
       font-weight: 300;

@@ -15,7 +15,7 @@
             <p class="mid-text">{{ $store.getters.getUserProfile.university }}</p>
           </div>
           <div class="reg-wrap">
-            <button class="btn editButton">Edit Profile</button>
+            <button @click="onProfileClicked" class="btn editButton">Edit Profile</button>
           </div>
         </div>
 

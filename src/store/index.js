@@ -3,13 +3,18 @@ import Vuex from 'vuex';
 import * as fb from '../http/firebase/firebase';
 import router from '../router/index';
 import Helpers from '../services/helpers';
+import { citiesData } from '../components/map/data/cities-data';
+
+const MAP_DATA = citiesData;
+let pharmaciesIndeces = {};
+MAP_DATA.forEach((mapObj,index) => pharmaciesIndeces[mapObj.cityName] = index);
 
 Vue.use(Vuex);
-
 export default new Vuex.Store({
   state: {
     // The user profile
     userProfile: {},
+    mapData: [],
     // Pharmacies
     pharmacies: [
       // {
@@ -63,12 +68,23 @@ export default new Vuex.Store({
      * @returns {*[]}
      */
     searchPharmacies(state, pharmacies) {
-      let searchValue = pharmacies.payload;
-      if (pharmacies) {
-        if(!searchValue || searchValue.trim() === '') { // empty search value
-          state.pharmacies = pharmacies.documents;
+      const allPharmacies = pharmacies?.documents;
+      const mapDataCopy = JSON.parse(JSON.stringify(MAP_DATA))
+      allPharmacies.forEach(pharmacy => {
+        const cityIndex = pharmaciesIndeces[pharmacy.city];
+        if(cityIndex!== undefined) {
+          mapDataCopy[cityIndex].pharmaciesCount++;
         }
-        state.pharmacies = pharmacies.documents.filter(pharmacy => {
+      });
+      this.state.mapData = mapDataCopy;
+      // change above to be called only when needed (on profile changed)
+      
+      let searchValue = pharmacies.payload;
+      if (allPharmacies) {
+        if(!searchValue || searchValue.trim() === '') { // empty search value
+          state.pharmacies = allPharmacies;
+        }
+        state.pharmacies = allPharmacies.filter(pharmacy => {
           const pharmacyName = pharmacy.name.toLowerCase().replace(/\s/g, '');
           searchValue = searchValue.toLowerCase().replace(/\s/g, '');
           return pharmacyName.includes(searchValue) ||
@@ -368,37 +384,42 @@ export default new Vuex.Store({
      * @returns {Promise<void>}
      */
     async updateUser({ dispatch }, trainee) {
-      const uid = fb.auth.currentUser.uid;
-      if (trainee.isTrainee) {
-        await fb.usersCollection.doc(uid)
-          .set({
-            isTrainee: true,
-            name: trainee.name.toString(),
-            password: trainee.password.toString(),
-            email: trainee.email.toString(),
-            phone: trainee.phone.toString(),
-            university_number: trainee.university_number.toString(),
-            university: trainee.university.toString(),
-            about: trainee.about,
-            university_year: trainee.university_year,
-            imageUrl: trainee.imageUrl
-          });
-      } else {
-        await fb.pharmaciesCollection.doc(uid)
-          .set({
-            isTrainee: false,
-            email: trainee.email,
-            name: trainee.name,
-            password: trainee.password,
-            phone: trainee.phone,
-            manager: trainee.manager,
-            imageUrl: trainee.imageUrl,
-            city: trainee.city,
-            noOfStudents: trainee.noOfStudents,
-            address: trainee.address
-          });
+      try {
+        const uid = fb.auth.currentUser.uid;
+        if (trainee.isTrainee) {
+          await fb.usersCollection.doc(uid)
+            .set({
+              isTrainee: true,
+              name: trainee.name.toString(),
+              password: trainee.password.toString(),
+              email: trainee.email.toString(),
+              phone: trainee.phone.toString(),
+              university_number: trainee.university_number.toString(),
+              university: trainee.university.toString(),
+              about: trainee.about,
+              university_year: trainee.university_year,
+              imageUrl: trainee.imageUrl
+            });
+        } else {
+          await fb.pharmaciesCollection.doc(uid)
+            .set({
+              isTrainee: false,
+              email: trainee.email,
+              name: trainee.name,
+              password: trainee.password,
+              phone: trainee.phone,
+              manager: trainee.manager,
+              imageUrl: trainee.imageUrl,
+              city: trainee.city,
+              noOfStudents: trainee.noOfStudents,
+              address: trainee.address
+            });
+        }
+        Vue.$toast.success("Updated!");
+        dispatch('fetchUserProfile', fb.auth.currentUser);
+      } catch (e) {
+        Vue.$toast.error(e.message);
       }
-      dispatch('fetchUserProfile', fb.auth.currentUser);
     },
 
     /**

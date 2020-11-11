@@ -21,8 +21,8 @@ export default {
 
 <style lang="scss" scoped>
   .wrapper {
-    margin: 0 auto;
-    margin-bottom: 20px;
+    // margin: 0 auto;
+    padding: 20px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;

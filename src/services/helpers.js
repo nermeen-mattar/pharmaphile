@@ -8,7 +8,6 @@ export default {
         return (currentRate * numOfCurrentReviews + newRate)/(numOfCurrentReviews + 1);
       },  
     validateForm(formValue) {
-        debugger;
         const keyNames = Object.keys(formValue);
         for(let i=0; i<keyNames.length; i++ ) {
             const value = formValue[keyNames[i]];
