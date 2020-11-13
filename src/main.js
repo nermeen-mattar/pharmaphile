@@ -49,12 +49,16 @@ let app;
 
 auth
   .onAuthStateChanged(user => {
-    console.log(user);
+    console.log('kkk', user);
     if (!app) {
       app = new Vue({
         router,
         store,
         render: (h) => h(App),
+        // created() {
+        //   // Prevent blank screen in Electron builds
+        //   this.$router.push('/')
+        // }
       }).$mount('#app');
     }
   });
