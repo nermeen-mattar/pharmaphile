@@ -109,6 +109,7 @@ import Navbar from '@/components/navigation/NavbarComponent';
 import RatingList from '@/components/rating/rating-list/Rating-List';
 import FooterComponent from '@/components/footer/FooterComponent';
 import { mapActions, mapGetters } from 'vuex';
+/* eslint-disable */ 
 
 export default {
   data() {
@@ -164,7 +165,7 @@ export default {
     onApplyClicked(training) {
       training.userId = this.$store.getters.getUserProfile.uid;
       training.pharmacyId = this.$store.state.selectedPharmacy.uuid;
-      training.id = this.$store.state.selectedPharmacy.uuid + training.name.trim();
+      training.id = this.$store.state.selectedPharmacy.uuid + training.name.replace(/\s/g, '_');
       training.user = this.$store.getters.getUserProfile;
       training.pharmacyName = this.$store.getters.selectedPharmacy.name;
       training.pharmacyLocation = this.$store.getters.selectedPharmacy.city + ', ' + this.$store.getters.selectedPharmacy.address;

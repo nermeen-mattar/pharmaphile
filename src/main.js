@@ -49,7 +49,7 @@ let app;
 
 auth
   .onAuthStateChanged(user => {
-    console.log('kkk', user);
+    console.log('only user', user);
     if (!app) {
       app = new Vue({
         router,

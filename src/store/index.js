@@ -8,7 +8,7 @@ import { citiesData } from '../components/map/data/cities-data';
 const MAP_DATA = citiesData;
 let pharmaciesIndeces = {};
 MAP_DATA.forEach((mapObj,index) => pharmaciesIndeces[mapObj.cityName] = index);
-
+/* eslint-disable */ 
 Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
@@ -412,6 +412,7 @@ export default new Vuex.Store({
         if (trainee.isTrainee) {
           await fb.usersCollection.doc(uid)
             .set({
+              uid,
               isTrainee: true,
               name: trainee.name.toString(),
               password: trainee.password.toString(),
@@ -426,6 +427,7 @@ export default new Vuex.Store({
         } else {
           await fb.pharmaciesCollection.doc(uid)
             .set({
+              uuid: uid,
               isTrainee: false,
               email: trainee.email,
               name: trainee.name,
