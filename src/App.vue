@@ -1,8 +1,27 @@
 <template>
   <div id="app">
+  <Banner> </Banner>
     <router-view />
   </div>
 </template>
+
+
+<script>
+import Banner from '@/components/banner/BannerComponent';
+
+export default {
+  name: 'App',
+  data() {
+    return {
+      // key: value
+    }
+  },
+  props: [],
+  computed: {
+  },
+components: { Banner }
+}
+</script>
 
 <style lang="scss">
 * {
@@ -31,6 +50,20 @@ body {
   transition: margin-left 0.5s;
 }
 
+#app.guest {
+button:not(.Rate__star):not(.contactButton):not(.applyButton):not(.signUpButton) { // input:not(.Rate__star)
+        background:#bbb;
+        // cursor: not-allowed!important;
+        pointer-events: none;
+  }
+}
+
+#app:not(.guest) {
+  .signup-banner {
+    display:none;
+  }
+}
+
 #nav {
   padding: 30px;
 
@@ -43,4 +76,5 @@ body {
     }
   }
 }
+
 </style>

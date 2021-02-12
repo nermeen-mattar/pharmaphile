@@ -19,10 +19,20 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore()
 const auth = firebase.auth()
 
+
 // collection references
 const usersCollection = db.collection('users')
 const pharmaciesCollection = db.collection('pharmacies')
 const reviewsCollection = db.collection('reviews')
+
+
+// getting data
+db.collection('pharmacies').get().then(snapshot => {
+  /* eslint-disable */  debugger;
+  snapshot.docs.forEach(doc => {
+      console.log('xxxxx', doc.data());
+  });
+});
 
 // export utils/refs
 export {

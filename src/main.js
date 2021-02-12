@@ -15,6 +15,7 @@ import VueToast from 'vue-toast-notification';
 // Import one of available themes
 import 'vue-toast-notification/dist/theme-default.css';
 //import 'vue-toast-notification/dist/theme-sugar.css';
+/* eslint-disable */ 
 
 window.EventBus = new Vue();
 
@@ -55,11 +56,16 @@ auth
         router,
         store,
         render: (h) => h(App),
-        // created() {
-        //   // Prevent blank screen in Electron builds
-        //   this.$router.push('/')
-        // }
+        created() {
+          // Prevent blank screen in Electron builds
+          // this.$router.push('/')
+        }
       }).$mount('#app');
+    }
+    if(user?.email === "guesttrainee@pharmaphile.net") { // guest@test.com
+      app.$el.className += ' guest'
+    } else {
+      app.$el.className = app.$el.className.replace(' guest', '');
     }
   });
 

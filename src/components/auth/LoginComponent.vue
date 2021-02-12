@@ -91,8 +91,8 @@ export default {
 
     onGuestLoginClicked() {
       this.$store.dispatch('login', {
-        email: "guest@pharmaphile.com",
-        password: "1234567"
+        email: "guesttrainee@pharmaphile.net", // guest@test.com
+        password: "test123"
       });
     },
 

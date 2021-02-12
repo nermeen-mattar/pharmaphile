@@ -17,14 +17,23 @@ export default new Vuex.Store({
     mapData: [],
     // Pharmacies
     pharmacies: [
-      // {
-      //   title: 'Talal Pharmacy',
-      //   pharmacist: 'Dr. haneen mustafa',
-      //   location: 'Al-balqa - ahmad st',
-      //   email: 'infopharmacy@email.com',
-      //   phone: '0798654321',
-      //   imageUrl: 'https://healthtimes.com.au/administrator/uploads/article_images/How%20To%20Become%20A%20Phar1593396808.jpg'
-      // },
+    // pharmacies: [
+      {
+        name: 'My Pharmacy',
+        manager: 'Dr. haneen mustafa',
+        address: 'Al-balqa - ahmad st',
+        email: 'infopharmacy@email.com',
+        phone: '0798654321',
+        imageUrl: 'https://healthtimes.com.au/administrator/uploads/article_images/How%20To%20Become%20A%20Phar1593396808.jpg'
+      },
+    //   {
+    //     title: 'Talal Pharmacy',
+    //     pharmacist: 'Dr. haneen mustafa',
+    //     location: 'Al-balqa - ahmad st',
+    //     email: 'infopharmacy@email.com',
+    //     phone: '0798654321',
+    //     imageUrl: 'https://healthtimes.com.au/administrator/uploads/article_images/How%20To%20Become%20A%20Phar1593396808.jpg'
+    //   },
     ],
     // Selected Pharmacy
     selectedPharmacy: {},
@@ -507,6 +516,7 @@ export default new Vuex.Store({
      * @returns {Promise<void>}
      */
     async fetchPharmacyProfile({ commit }, user) {
+      /* eslint-disable */  debugger;
       // fetch user profile
       const userProfileData = await fb.pharmaciesCollection.doc(user.uid)
         .get();
@@ -589,9 +599,13 @@ export default new Vuex.Store({
      * @returns {Promise<void>}
      */
     async search({ commit }, payload) {
+      debugger;
+      console.log('search');
+
       await fb.pharmaciesCollection.get()
         .then(querySnapshot => {
           const documents = querySnapshot.docs.map(doc => doc.data());
+          console.log('xxxxx', documents);
           commit('searchPharmacies', {
             documents,
             payload

@@ -9,7 +9,6 @@
       </div>
       <div class="row min-vw-100 justify-content-center">
         <div class="map">
-<!--          <map-component></map-component>-->
           <MapComponentssss></MapComponentssss>
         </div>
       </div>
@@ -35,6 +34,7 @@
 import Navbar from '@/components/navigation/NavbarComponent';
 import FooterComponent from '@/components/footer/FooterComponent';
 import MapComponentssss from '@/components/map/Map2Component';
+// import MapComponentV2 from '@/components/map/MapComponent';
 import PharmacyList from '@/components/pharmacies/pharmacy-list/pharmacy-list';
 
 export default {
@@ -49,6 +49,7 @@ export default {
     PharmacyList,
     FooterComponent,
     MapComponentssss,
+    // MapComponentV2,
     Navbar
   },
   created() {

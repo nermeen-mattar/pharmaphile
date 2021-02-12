@@ -304,8 +304,11 @@ export default {
 /*
     Desktops
  */
-
-.signUpWrapper {
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex !important;
+  flex-direction: column;
 
   .logo-sm {
     width: 300px;
@@ -347,14 +350,14 @@ export default {
     Phone
  */
 @media only screen and (max-width: 600px) {
-}
-
-</style>
-
-<style lang="scss">
-.login-wrap {
-  .vm--modal {
-    overflow: auto !important;
+  .wrapper {
+    margin-top: 15%;
+    width: 100%;
+    height: 100%;
+    display: flex !important;
+    flex-direction: column;
   }
+
 }
+
 </style>
