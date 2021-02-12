@@ -4,6 +4,7 @@ import * as fb from '../http/firebase/firebase';
 import router from '../router/index';
 import Helpers from '../services/helpers';
 import { citiesData } from '../components/map/data/cities-data';
+import DEFAULT_IMAGE from '../components/map/data/DEFAULT_IMAGE';
 
 const MAP_DATA = citiesData;
 let pharmaciesIndeces = {};
@@ -656,6 +657,7 @@ export default new Vuex.Store({
      */
     getUserProfile: (state) => {
       let jsonParsed = sessionStorage.getItem('user') === 'undefined' ? '' : JSON.parse(sessionStorage.getItem('user'));
+      jsonParsed.imageUrl =  jsonParsed.imageUrl || DEFAULT_IMAGE;
       return state.userProfile === {} ? {} : jsonParsed;
     },
 
